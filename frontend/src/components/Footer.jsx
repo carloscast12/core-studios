@@ -13,15 +13,15 @@ function Footer() {
           <div>
             <p style={{ fontSize: '13px', fontWeight: '500', color: '#888', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Síguenos</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <a href="https://instagram.com" target="_blank" rel="noreferrer" style={{ fontSize: '13px', color: '#ccc', textDecoration: 'none' }}>Instagram</a>
-              <a href="https://youtube.com" target="_blank" rel="noreferrer" style={{ fontSize: '13px', color: '#ccc', textDecoration: 'none' }}>YouTube</a>
+              <a href="https://instagram.com/corestudios.mad/" target="_blank" rel="noreferrer" style={{ fontSize: '13px', color: '#ccc', textDecoration: 'none' }}>Instagram</a>
+              <a href="https://youtube.com/@corestudiosmadrid?si=-WDy8d0ANCh7f_bx" target="_blank" rel="noreferrer" style={{ fontSize: '13px', color: '#ccc', textDecoration: 'none' }}>YouTube</a>
             </div>
           </div>
   
           {/* Contacto */}
           <div>
             <p style={{ fontSize: '13px', fontWeight: '500', color: '#888', marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Contacto</p>
-            <p style={{ fontSize: '13px', color: '#ccc', margin: '0 0 6px' }}>contacto@corestudios.com</p>
+            <p style={{ fontSize: '13px', color: '#ccc', margin: '0 0 6px' }}>corestudios.madrid@gmail.com</p>
             <p style={{ fontSize: '13px', color: '#ccc', margin: 0 }}>Madrid, España</p>
           </div>
   
