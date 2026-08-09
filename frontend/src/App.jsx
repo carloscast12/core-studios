@@ -15,6 +15,11 @@ function ProfileRedirect() {
   return <Navigate to={`/profile/${user.id}`} replace />
 }
 
+function RootRedirect() {
+  const { token } = useAuth()
+  return <Navigate to={token ? '/dashboard' : '/login'} replace />
+}
+
 function App() {
   return (
     <BrowserRouter>
@@ -22,6 +27,7 @@ function App() {
         <Navbar />
         <div style={{ flex: 1 }}>
           <Routes>
+            <Route path="/" element={<RootRedirect />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
