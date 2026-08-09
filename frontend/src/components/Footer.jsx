@@ -1,13 +1,7 @@
 function Footer() {
     return (
-      <footer style={{
-        background: '#1a1a1a',
-        borderTop: '0.5px solid #333',
-        padding: '2rem 3rem',
-        marginTop: '2rem',
-        fontFamily: 'Montserrat, sans-serif'
-      }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
+      <footer className="footer">
+        <div className="footer-grid">
   
           {/* Logo + nombre */}
           <div>

@@ -3,10 +3,8 @@ import Comment from "../models/Comment.js";
 
 export const createPost = async (req, res) => {
   try {
-    const { text, images } = req.body;
-    if (images.length > 4) {
-      return res.status(400).json({ message: "máximo 4 imágenes" });
-    }
+    const { text } = req.body;
+    const images = (req.files || []).map((file) => file.secure_url);
     if (text.length > 120) {
       return res.status(400).json({ message: "máximo 120 caracteres" });
     }
@@ -20,10 +18,15 @@ export const createPost = async (req, res) => {
 
 export const getPosts = async (req, res) => {
   try {
-    const allPosts = await Post.find()
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 5;
+    const filter = req.query.user ? { user: req.query.user } : {};
+    const posts = await Post.find(filter)
       .sort({ createdAt: -1 })
+      .skip((page - 1) * limit)
+      .limit(limit)
       .populate("user", "-password");
-    return res.status(200).json(allPosts);
+    return res.status(200).json(posts);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -75,5 +78,3 @@ export const getPostById = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
-
-export default { createPost, getPosts, deletePost, likePost, getPostById };

@@ -5,6 +5,8 @@ import userRoutes from "./src/routes/user.routes.js";
 import bookingRoutes from "./src/routes/booking.routes.js";
 import postRoutes from "./src/routes/post.routes.js";
 import commentRoutes from "./src/routes/comment.routes.js";
+import followRoutes from "./src/routes/follow.routes.js";
+import serviceRoutes from "./src/routes/service.routes.js";
 
 const app = express();
 
@@ -16,5 +18,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/comments", commentRoutes);
+app.use("/api/follows", followRoutes);
+app.use("/api/services", serviceRoutes);
 
 export default app;

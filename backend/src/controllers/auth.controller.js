@@ -43,13 +43,14 @@ export const login = async (req, res) => {
     if (!matchedPassword) {
       return res.status(400).json({ message: "datos incorrectos" });
     }
-    return res.status(200).json({ 
+    return res.status(200).json({
       token: generateToken(findUser.id, findUser.role),
       user: {
         id: findUser.id,
         name: findUser.name,
         email: findUser.email,
-        role: findUser.role
+        role: findUser.role,
+        avatar: findUser.avatar
       }
     })
   } catch (error) {
@@ -60,5 +61,3 @@ export const login = async (req, res) => {
 export const logout = (req, res) => {
   return res.status(200).json({ message: "sesión cerrada correctamente" });
 };
-
-export default { register, login, logout };

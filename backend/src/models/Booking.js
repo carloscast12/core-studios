@@ -6,6 +6,7 @@ const bookingSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
+      index: true,
     },
     cabinType: {
       type: String,
@@ -31,5 +32,7 @@ const bookingSchema = new mongoose.Schema(
   },
   { timestamps: true },
 );
+
+bookingSchema.index({ cabinType: 1, startTime: 1 });
 
 export default mongoose.model("Booking", bookingSchema);

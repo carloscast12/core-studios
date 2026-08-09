@@ -6,6 +6,7 @@ export const createBooking = async (req, res) => {
     const { cabinType, startTime, endTime, notes, price } = req.body;
     const notAvailable = await Booking.findOne({
       cabinType,
+      status: { $ne: "cancelada" },
       startTime: { $lt: endTime },
       endTime: { $gt: startTime },
     });
@@ -125,14 +126,4 @@ export const updateBookingStatus = async (req, res) => {
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
-};
-
-export default {
-  createBooking,
-  getBooking,
-  getAdminBooking,
-  getAvailableSlots,
-  updateBooking,
-  deleteBooking,
-  updateBookingStatus,
 };

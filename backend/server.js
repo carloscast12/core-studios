@@ -1,10 +1,9 @@
-import dotenv from "dotenv";
+import "dotenv/config";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import connectDB from "./src/config/db.js";
 import app from "./app.js";
 
-dotenv.config();
 connectDB();
 
 const httpServer = createServer(app);

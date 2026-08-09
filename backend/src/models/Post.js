@@ -5,6 +5,7 @@ const postSchema = new mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+      index: true,
     },
     text: {
       type: String,
@@ -23,5 +24,7 @@ const postSchema = new mongoose.Schema(
   },
   { timestamps: true },
 );
+
+postSchema.index({ createdAt: -1 });
 
 export default mongoose.model("Post", postSchema);
