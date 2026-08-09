@@ -188,7 +188,7 @@ function Services() {
                 marginBottom: "1.5rem",
               }}
             >
-              <h2 style={{ margin: 0, fontSize: "16px", fontWeight: "500" }}>
+              <h2 style={{ margin: 0, fontSize: "16px", fontWeight: "500", color: "#1B1F24" }}>
                 {activeService.title}
               </h2>
               <button
