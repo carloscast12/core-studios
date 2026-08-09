@@ -481,7 +481,7 @@ function Social() {
                     })}
                   </span>
                 </div>
-                {post.user?._id === user?.id && (
+                {(post.user?._id === user?.id || user?.role === "admin") && (
                   <span
                     onClick={() => handleEliminarPost(post._id)}
                     style={{
@@ -620,7 +620,7 @@ function Social() {
                             {c.text}
                           </p>
                         </div>
-                        {c.user?._id === user?.id && (
+                        {(c.user?._id === user?.id || user?.role === "admin") && (
                           <span
                             onClick={() => handleDeleteComment(c._id, post._id)}
                             style={{

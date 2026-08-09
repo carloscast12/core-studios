@@ -1,6 +1,10 @@
 import User from "../models/User.js";
 import Booking from "../models/Booking.js";
 
+const purgeExpiredBookings = async () => {
+  await Booking.deleteMany({ endTime: { $lt: new Date() } });
+};
+
 export const createBooking = async (req, res) => {
   try {
     const { cabinType, startTime, endTime, notes, price } = req.body;
@@ -30,6 +34,7 @@ export const createBooking = async (req, res) => {
 
 export const getBooking = async (req, res) => {
   try {
+    await purgeExpiredBookings();
     const allBookings = await Booking.find({ user: req.user.id });
     return res.status(200).json(allBookings);
   } catch (error) {
@@ -42,6 +47,7 @@ export const getAdminBooking = async (req, res) => {
     if (req.user.role !== "admin") {
       return res.status(403).json({ message: "no autorizado" });
     }
+    await purgeExpiredBookings();
     const allAdminBookings = await Booking.find().populate("user", "-password");
     return res.status(200).json(allAdminBookings);
   } catch (error) {

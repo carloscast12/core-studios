@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import api from "../services/api";
 import producir from "../assets/producir.svg";
@@ -8,7 +7,6 @@ import edit from "../assets/edit.svg";
 
 function Dashboard() {
   const { user } = useAuth();
-  const navigate = useNavigate();
 
   // ── Estados ──────────────────────────────────────
   const [bookings, setBookings] = useState([]);
@@ -26,6 +24,14 @@ function Dashboard() {
     duracion: "",
     notes: "",
   });
+
+  // ── Estados panel de administrador ────────────────
+  const [adminBookings, setAdminBookings] = useState([]);
+  const [adminDate, setAdminDate] = useState(
+    new Date().toISOString().split("T")[0],
+  );
+  const [adminError, setAdminError] = useState(null);
+  const [adminLoadError, setAdminLoadError] = useState(false);
 
   // ── Carga inicial ─────────────────────────────────
   useEffect(() => {
@@ -50,6 +56,53 @@ function Dashboard() {
     };
     fetchData();
   }, []);
+
+  // ── Carga reservas de todos los usuarios (solo admin) ─
+  useEffect(() => {
+    if (user?.role !== "admin") return;
+    const fetchAdminBookings = async () => {
+      try {
+        const res = await api.get("/bookings/admin");
+        setAdminBookings(res.data);
+        setAdminLoadError(false);
+      } catch (error) {
+        console.error(error);
+        setAdminLoadError(true);
+      }
+    };
+    fetchAdminBookings();
+  }, [user?.role]);
+
+  // ── Funciones panel de administrador ──────────────
+  const handleConfirmarReservaAdmin = async (id) => {
+    try {
+      await api.put(`/bookings/${id}/status`);
+      setAdminBookings((prev) =>
+        prev.map((b) => (b._id === id ? { ...b, status: "confirmada" } : b)),
+      );
+      setAdminError(null);
+    } catch {
+      setAdminError("No se pudo confirmar la reserva");
+    }
+  };
+
+  const handleCancelarReservaAdmin = async (id) => {
+    try {
+      await api.put(`/bookings/${id}`, { status: "cancelada" });
+      setAdminBookings((prev) =>
+        prev.map((b) => (b._id === id ? { ...b, status: "cancelada" } : b)),
+      );
+      setAdminError(null);
+    } catch {
+      setAdminError("No se pudo cancelar la reserva");
+    }
+  };
+
+  const adminBookingsDelDia = adminBookings
+    .filter(
+      (b) => new Date(b.startTime).toISOString().split("T")[0] === adminDate,
+    )
+    .sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
 
   // ── Funciones de reservas ─────────────────────────
   const calcularPrecio = () => {
@@ -637,6 +690,149 @@ function Dashboard() {
           );
         })}
       </div>
+
+      {/* Panel de administrador — reservas de todos los usuarios */}
+      {user?.role === "admin" && (
+        <div style={{ marginTop: "1rem" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "1rem",
+              flexWrap: "wrap",
+              gap: "10px",
+            }}
+          >
+            <span
+              style={{
+                fontSize: "13px",
+                fontWeight: "500",
+                color: "#888",
+                textTransform: "uppercase",
+                letterSpacing: "0.04em",
+              }}
+            >
+              Panel de administrador — Reservas por día
+            </span>
+            <input
+              type="date"
+              value={adminDate}
+              onChange={(e) => setAdminDate(e.target.value)}
+              style={{
+                padding: "8px 12px",
+                borderRadius: "8px",
+                border: "0.5px solid #ccc",
+                fontSize: "13px",
+              }}
+            />
+          </div>
+
+          {adminLoadError && (
+            <p style={{ fontSize: "13px", color: "#e24b4a", marginBottom: "1rem" }}>
+              No se pudieron cargar las reservas de los usuarios.
+            </p>
+          )}
+          {adminError && (
+            <p style={{ fontSize: "13px", color: "#e24b4a", marginBottom: "1rem" }}>
+              {adminError}
+            </p>
+          )}
+
+          <div className="bookings-list">
+            {adminBookingsDelDia.length === 0 && !adminLoadError && (
+              <div className="booking-card">
+                <p style={{ fontSize: "13px", color: "#888", margin: 0 }}>
+                  No hay reservas para este día
+                </p>
+              </div>
+            )}
+            {adminBookingsDelDia.map((booking) => {
+              const cabinTitle =
+                booking.cabinType === "dj" ? "Cabina DJ" : "Cabina de producción";
+              const statusColors = {
+                confirmada: { bg: "#EAF3DE", color: "#27500A" },
+                pendiente: { bg: "#FAEEDA", color: "#633806" },
+                cancelada: { bg: "#FBE4E4", color: "#8A2E2E" },
+              };
+              const statusStyle = statusColors[booking.status] || statusColors.pendiente;
+              return (
+                <div key={booking._id} className="booking-card">
+                  <div className="booking-card-header">
+                    <span className="booking-card-title">
+                      {cabinTitle} — {booking.user?.name || "Usuario eliminado"}
+                    </span>
+                    <span
+                      style={{
+                        fontSize: "11px",
+                        padding: "2px 8px",
+                        borderRadius: "8px",
+                        fontWeight: "500",
+                        background: statusStyle.bg,
+                        color: statusStyle.color,
+                      }}
+                    >
+                      {booking.status}
+                    </span>
+                  </div>
+                  <div className="booking-card-time">
+                    {new Date(booking.startTime).toLocaleTimeString("es-ES", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}{" "}
+                    –{" "}
+                    {new Date(booking.endTime).toLocaleTimeString("es-ES", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </div>
+                  {booking.notes && (
+                    <p className="booking-card-note" style={{ marginBottom: "10px" }}>
+                      {booking.notes}
+                    </p>
+                  )}
+                  <div style={{ display: "flex", gap: "8px" }}>
+                    {booking.status !== "confirmada" && (
+                      <button
+                        onClick={() => handleConfirmarReservaAdmin(booking._id)}
+                        style={{
+                          padding: "8px 16px",
+                          background: "#1B35C6",
+                          color: "#fff",
+                          border: "none",
+                          borderRadius: "8px",
+                          fontSize: "12px",
+                          fontWeight: "500",
+                          cursor: "pointer",
+                        }}
+                      >
+                        Confirmar
+                      </button>
+                    )}
+                    {booking.status !== "cancelada" && (
+                      <button
+                        onClick={() => handleCancelarReservaAdmin(booking._id)}
+                        style={{
+                          padding: "8px 16px",
+                          background: "#fff",
+                          color: "#e24b4a",
+                          border: "0.5px solid #e24b4a",
+                          borderRadius: "8px",
+                          fontSize: "12px",
+                          fontWeight: "500",
+                          cursor: "pointer",
+                        }}
+                      >
+                        Cancelar
+                      </button>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Modal */}
       {showModal && (

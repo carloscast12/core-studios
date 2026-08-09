@@ -131,7 +131,7 @@ export const getFollowers = async (req, res) => {
       "follower",
       "-password",
     );
-    return res.status(200).json(follows.map((f) => f.follower));
+    return res.status(200).json(follows.map((f) => f.follower).filter(Boolean));
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -146,7 +146,7 @@ export const getFollowing = async (req, res) => {
       "following",
       "-password",
     );
-    return res.status(200).json(follows.map((f) => f.following));
+    return res.status(200).json(follows.map((f) => f.following).filter(Boolean));
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
