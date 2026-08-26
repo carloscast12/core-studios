@@ -4,6 +4,7 @@ import Register from './pages/Register.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import UserProfile from './pages/UserProfile.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
+import GuestRoute from './components/GuestRoute.jsx'
 import Navbar from './components/Navbar.jsx'
 import Social from './pages/Social.jsx'
 import Services from './pages/Services.jsx'
@@ -28,8 +29,8 @@ function App() {
         <div style={{ flex: 1 }}>
           <Routes>
             <Route path="/" element={<RootRedirect />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<GuestRoute><Login /></GuestRoute>} />
+            <Route path="/register" element={<GuestRoute><Register /></GuestRoute>} />
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/profile" element={<ProtectedRoute><ProfileRedirect /></ProtectedRoute>} />
             <Route path="/profile/:userId" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
