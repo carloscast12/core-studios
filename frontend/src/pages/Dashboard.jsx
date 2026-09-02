@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { useCart } from "../context/CartContext";
 import api from "../services/api";
 import producir from "../assets/producir.svg";
 import dj from "../assets/dj.svg";
@@ -9,6 +10,7 @@ import AdminMembershipPanel from "../components/AdminMembershipPanel";
 
 function Dashboard() {
   const { user } = useAuth();
+  const { addItem } = useCart();
 
   // ── Estados ──────────────────────────────────────
   const [bookings, setBookings] = useState([]);
@@ -120,13 +122,21 @@ function Dashboard() {
       );
       const end = new Date(start);
       end.setHours(end.getHours() + parseInt(newBooking.duracion));
-      await api.post("/bookings", {
+      const created = await api.post("/bookings", {
         cabinType: newBooking.cabinType,
         startTime: start,
         endTime: end,
         notes: newBooking.notes,
         price: calcularPrecio(),
       });
+      if (!created.data.coveredByMembership) {
+        const cabinTitle = newBooking.cabinType === "dj" ? "Cabina DJ" : "Cabina de producción";
+        addItem({
+          type: "booking",
+          label: `${cabinTitle} — ${newBooking.date} ${newBooking.hora}:00 (${newBooking.duracion}h)`,
+          price: created.data.price,
+        });
+      }
       setShowModal(false);
       setNewBooking({
         cabinType: "dj",

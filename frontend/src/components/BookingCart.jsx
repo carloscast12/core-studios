@@ -1,43 +1,20 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
-
-const PRECIOS = { 1: 25, 2: 45, 4: 75 };
-
-const inputStyle = {
-  width: "100%",
-  padding: "8px",
-  borderRadius: "8px",
-  border: "0.5px solid #ccc",
-  fontSize: "13px",
-};
+import { useCart } from "../context/CartContext";
 
 function BookingCart() {
   const { token } = useAuth();
+  const { items, removeItem } = useCart();
   const [open, setOpen] = useState(false);
-  const [items, setItems] = useState([]);
   const [notice, setNotice] = useState(null);
-  const [form, setForm] = useState({ cabinType: "dj", date: "", hora: "", duracion: "" });
 
   if (!token) return null;
-
-  const handleAgregar = () => {
-    if (!form.date || !form.hora || !form.duracion) return;
-    setItems((prev) => [
-      ...prev,
-      { id: Date.now(), ...form, price: PRECIOS[parseInt(form.duracion)] || 0 },
-    ]);
-    setForm({ cabinType: "dj", date: "", hora: "", duracion: "" });
-  };
-
-  const handleQuitar = (id) => {
-    setItems((prev) => prev.filter((i) => i.id !== id));
-  };
 
   const total = items.reduce((sum, i) => sum + i.price, 0);
 
   const handlePagar = () => {
     setNotice(
-      "El pago con tarjeta estará disponible muy pronto — mientras tanto, reserva desde tu Dashboard.",
+      "El pago con tarjeta estará disponible muy pronto — mientras tanto, tus reservas quedan pendientes de confirmación.",
     );
   };
 
@@ -111,7 +88,7 @@ function BookingCart() {
             }}
           >
             <span style={{ fontSize: "14px", fontWeight: "600", color: "#1B1F24" }}>
-              Carrito de reservas
+              Resumen de compra
             </span>
             <button
               onClick={() => setOpen(false)}
@@ -121,62 +98,10 @@ function BookingCart() {
             </button>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginBottom: "1rem" }}>
-            <select
-              value={form.cabinType}
-              onChange={(e) => setForm({ ...form, cabinType: e.target.value })}
-              style={inputStyle}
-            >
-              <option value="dj">Cabina DJ</option>
-              <option value="produccion">Cabina de producción</option>
-            </select>
-            <input
-              type="date"
-              value={form.date}
-              onChange={(e) => setForm({ ...form, date: e.target.value })}
-              style={inputStyle}
-            />
-            <select
-              value={form.hora}
-              onChange={(e) => setForm({ ...form, hora: e.target.value })}
-              style={inputStyle}
-            >
-              <option value="">Hora</option>
-              {Array.from({ length: 14 }, (_, i) => i + 9).map((h) => (
-                <option key={h} value={h}>
-                  {h}:00
-                </option>
-              ))}
-            </select>
-            <select
-              value={form.duracion}
-              onChange={(e) => setForm({ ...form, duracion: e.target.value })}
-              style={inputStyle}
-            >
-              <option value="">Duración</option>
-              <option value="1">1 hora</option>
-              <option value="2">2 horas</option>
-              <option value="4">4 horas</option>
-            </select>
-            <button
-              onClick={handleAgregar}
-              style={{
-                padding: "8px",
-                background: "#f5f6f8",
-                color: "#1B35C6",
-                border: "0.5px solid #1B35C6",
-                borderRadius: "8px",
-                fontSize: "13px",
-                fontWeight: "500",
-                cursor: "pointer",
-              }}
-            >
-              + Agregar al carrito
-            </button>
-          </div>
-
           {items.length === 0 ? (
-            <p style={{ fontSize: "13px", color: "#888" }}>Tu carrito está vacío</p>
+            <p style={{ fontSize: "13px", color: "#888" }}>
+              Todavía no has agregado ninguna reserva o membresía.
+            </p>
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: "8px", marginBottom: "1rem" }}>
               {items.map((item) => (
@@ -192,18 +117,11 @@ function BookingCart() {
                     borderRadius: "8px",
                   }}
                 >
-                  <div>
-                    <div style={{ fontWeight: "500", color: "#1B1F24" }}>
-                      {item.cabinType === "dj" ? "Cabina DJ" : "Cabina de producción"}
-                    </div>
-                    <div style={{ color: "#888" }}>
-                      {item.date} · {item.hora}:00 · {item.duracion}h
-                    </div>
-                  </div>
+                  <div style={{ color: "#1B1F24" }}>{item.label}</div>
                   <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                     <span style={{ fontWeight: "500", color: "#1B1F24" }}>{item.price}€</span>
                     <span
-                      onClick={() => handleQuitar(item.id)}
+                      onClick={() => removeItem(item.id)}
                       style={{ cursor: "pointer", color: "#e24b4a" }}
                     >
                       ✕

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useCart } from "../context/CartContext";
 
 const PLANS = [
   {
@@ -23,12 +24,16 @@ const PLANS = [
 ];
 
 function Membresias() {
+  const { addItem } = useCart();
   const [notice, setNotice] = useState(null);
 
-  const handleComprar = () => {
-    setNotice(
-      "El pago de membresías online estará disponible muy pronto. Mientras tanto, contáctanos para activar la tuya.",
-    );
+  const handleComprar = (plan) => {
+    addItem({
+      type: "membership",
+      label: `Membresía ${plan.title}`,
+      price: plan.price,
+    });
+    setNotice("Se agregó al carrito. Termina el pago desde el carrito flotante para activar tu membresía.");
   };
 
   return (
@@ -129,7 +134,7 @@ function Membresias() {
                 ))}
               </ul>
               <button
-                onClick={handleComprar}
+                onClick={() => handleComprar(plan)}
                 style={{
                   padding: "10px",
                   background: "#1B35C6",
