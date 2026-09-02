@@ -29,6 +29,10 @@ const bookingSchema = new mongoose.Schema(
       enum: ["pendiente", "confirmada", "cancelada"],
       default: "pendiente",
     },
+    coveredByMembership: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true },
 );

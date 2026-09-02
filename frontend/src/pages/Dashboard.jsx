@@ -4,6 +4,8 @@ import api from "../services/api";
 import producir from "../assets/producir.svg";
 import dj from "../assets/dj.svg";
 import edit from "../assets/edit.svg";
+import MembershipCard from "../components/MembershipCard";
+import AdminMembershipPanel from "../components/AdminMembershipPanel";
 
 function Dashboard() {
   const { user } = useAuth();
@@ -579,6 +581,8 @@ function Dashboard() {
         </div>
       </div>
 
+      <MembershipCard />
+
       {/* Reservas */}
       <div
         style={{
@@ -831,6 +835,8 @@ function Dashboard() {
               );
             })}
           </div>
+
+          <AdminMembershipPanel />
         </div>
       )}
 

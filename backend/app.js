@@ -7,6 +7,7 @@ import postRoutes from "./src/routes/post.routes.js";
 import commentRoutes from "./src/routes/comment.routes.js";
 import followRoutes from "./src/routes/follow.routes.js";
 import serviceRoutes from "./src/routes/service.routes.js";
+import membershipRoutes from "./src/routes/membership.routes.js";
 
 const app = express();
 
@@ -20,5 +21,6 @@ app.use("/api/posts", postRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/follows", followRoutes);
 app.use("/api/services", serviceRoutes);
+app.use("/api/memberships", membershipRoutes);
 
 export default app;

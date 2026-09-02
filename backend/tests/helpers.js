@@ -12,3 +12,8 @@ export async function registerUser(overrides = {}) {
     });
   return res.body;
 }
+
+export async function loginUser(email, password = "test1234") {
+  const res = await request(app).post("/api/auth/login").send({ email, password });
+  return res.body;
+}

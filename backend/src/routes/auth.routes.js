@@ -9,6 +9,7 @@ const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 10,
   message: { message: "Demasiados intentos, intenta de nuevo en unos minutos" },
+  skip: () => process.env.NODE_ENV === "test",
 });
 
 router.post("/register", authLimiter, register);

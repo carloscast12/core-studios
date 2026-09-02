@@ -4,6 +4,7 @@ import Follow from "../models/Follow.js";
 import Post from "../models/Post.js";
 import Comment from "../models/Comment.js";
 import Booking from "../models/Booking.js";
+import Membership from "../models/Membership.js";
 
 export const getProfile = async (req, res) => {
   try {
@@ -113,6 +114,7 @@ export const deleteUser = async (req, res) => {
       Comment.deleteMany({ $or: [{ user: id }, { post: { $in: postIds } }] }),
       Booking.deleteMany({ user: id }),
       Follow.deleteMany({ $or: [{ follower: id }, { following: id }] }),
+      Membership.deleteOne({ user: id }),
       User.findByIdAndDelete(id),
     ]);
 

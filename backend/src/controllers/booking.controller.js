@@ -1,5 +1,7 @@
 import User from "../models/User.js";
 import Booking from "../models/Booking.js";
+import Membership from "../models/Membership.js";
+import { refreshCycleIfNeeded } from "../utils/membershipCycle.js";
 
 const purgeExpiredBookings = async () => {
   await Booking.deleteMany({ endTime: { $lt: new Date() } });
@@ -17,13 +19,29 @@ export const createBooking = async (req, res) => {
     if (notAvailable) {
       return res.status(400).json({ message: "horario no disponible" });
     }
+
+    const durationHours = (new Date(endTime) - new Date(startTime)) / (1000 * 60 * 60);
+    let membership = await Membership.findOne({ user: req.user.id, status: "activa" });
+    let coveredByMembership = false;
+    let finalPrice = price;
+    if (membership) {
+      membership = await refreshCycleIfNeeded(membership);
+      if (membership.hoursRemaining >= durationHours) {
+        membership.hoursRemaining -= durationHours;
+        await membership.save();
+        coveredByMembership = true;
+        finalPrice = 0;
+      }
+    }
+
     const createdBooking = new Booking({
       user: req.user.id,
       cabinType,
       startTime,
       endTime,
       notes,
-      price,
+      price: finalPrice,
+      coveredByMembership,
     });
     await createdBooking.save();
     return res.status(201).json(createdBooking);
