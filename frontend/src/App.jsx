@@ -8,7 +8,9 @@ import GuestRoute from './components/GuestRoute.jsx'
 import Navbar from './components/Navbar.jsx'
 import Social from './pages/Social.jsx'
 import Services from './pages/Services.jsx'
+import Membresias from './pages/Membresias.jsx'
 import Footer from './components/Footer.jsx'
+import BookingCart from './components/BookingCart.jsx'
 import { useAuth } from './context/AuthContext.jsx'
 
 function ProfileRedirect() {
@@ -36,9 +38,11 @@ function App() {
             <Route path="/profile/:userId" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
             <Route path="/social" element={<ProtectedRoute><Social /></ProtectedRoute>} />
             <Route path="/servicios" element={<ProtectedRoute><Services /></ProtectedRoute>} />
+            <Route path="/membresias" element={<ProtectedRoute><Membresias /></ProtectedRoute>} />
           </Routes>
         </div>
         <Footer />
+        <BookingCart />
       </div>
     </BrowserRouter>
   )

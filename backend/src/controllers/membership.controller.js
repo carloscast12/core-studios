@@ -4,13 +4,20 @@ import { refreshCycleIfNeeded } from "../utils/membershipCycle.js";
 
 const THREE_MONTHS_MS = 1000 * 60 * 60 * 24 * 30 * 3;
 
+const withComputedDates = (membership) => {
+  const cycleEndsAt = new Date(membership.currentCycleStart);
+  cycleEndsAt.setMonth(cycleEndsAt.getMonth() + 1);
+  const cancelableFrom = new Date(membership.startDate.getTime() + THREE_MONTHS_MS);
+  const hoursUsed = MEMBERSHIP_PLANS[membership.plan].hours - membership.hoursRemaining;
+  return { ...membership.toObject(), cycleEndsAt, cancelableFrom, hoursUsed };
+};
+
 export const getMyMembership = async (req, res) => {
   try {
     let membership = await Membership.findOne({ user: req.user.id });
     if (!membership) return res.status(200).json(null);
     membership = await refreshCycleIfNeeded(membership);
-    const cancelableFrom = new Date(membership.startDate.getTime() + THREE_MONTHS_MS);
-    return res.status(200).json({ ...membership.toObject(), cancelableFrom });
+    return res.status(200).json(withComputedDates(membership));
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -70,8 +77,9 @@ export const getAllMemberships = async (req, res) => {
     if (req.user.role !== "admin") {
       return res.status(403).json({ message: "no autorizado" });
     }
-    const memberships = await Membership.find().populate("user", "-password");
-    return res.status(200).json(memberships);
+    let memberships = await Membership.find().populate("user", "-password");
+    memberships = await Promise.all(memberships.map(refreshCycleIfNeeded));
+    return res.status(200).json(memberships.map(withComputedDates));
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

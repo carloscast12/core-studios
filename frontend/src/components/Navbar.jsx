@@ -69,6 +69,13 @@ function Navbar() {
           >
             Servicios adicionales
           </span>
+
+          <span
+            onClick={() => goTo("/membresias")}
+            className={`nav-link${location.pathname === "/membresias" ? " active" : ""}`}
+          >
+            Membresías
+          </span>
         </div>
 
         {/* Avatar + Logout */}

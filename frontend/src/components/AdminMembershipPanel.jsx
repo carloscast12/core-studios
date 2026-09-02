@@ -6,6 +6,8 @@ const PLAN_LABELS = {
   premium: "Premium — 150€/mes, 13h + videoset",
 };
 
+const formatDate = (d) => new Date(d).toLocaleDateString("es-ES");
+
 function AdminMembershipPanel() {
   const [memberships, setMemberships] = useState([]);
   const [loadError, setLoadError] = useState(false);
@@ -124,40 +126,71 @@ function AdminMembershipPanel() {
         </p>
       )}
 
-      <div className="bookings-list">
-        {memberships.length === 0 && !loadError && (
-          <div className="booking-card">
-            <p style={{ fontSize: "13px", color: "#888", margin: 0 }}>
-              Todavía no hay membresías activas
-            </p>
-          </div>
-        )}
-        {memberships.map((m) => (
-          <div key={m._id} className="booking-card">
-            <div className="booking-card-header">
-              <span className="booking-card-title">
-                {m.user?.name || "Usuario eliminado"}
-              </span>
-              <span
-                style={{
-                  fontSize: "11px",
-                  padding: "2px 8px",
-                  borderRadius: "8px",
-                  fontWeight: "500",
-                  background: m.status === "activa" ? "#EAF3DE" : "#FBE4E4",
-                  color: m.status === "activa" ? "#27500A" : "#8A2E2E",
-                }}
-              >
-                {m.status}
-              </span>
-            </div>
-            <div className="booking-card-time">{PLAN_LABELS[m.plan]}</div>
-            <p className="booking-card-note">
-              {m.hoursRemaining}h restantes este mes · {m.user?.email}
-            </p>
-          </div>
-        ))}
-      </div>
+      {memberships.length === 0 && !loadError && (
+        <div className="booking-card">
+          <p style={{ fontSize: "13px", color: "#888", margin: 0 }}>
+            Todavía no hay membresías activas
+          </p>
+        </div>
+      )}
+
+      {memberships.length > 0 && (
+        <div
+          style={{
+            background: "#ffffff",
+            borderRadius: "18px",
+            boxShadow: "0 4px 20px rgba(50, 50, 50, 0.2)",
+            overflowX: "auto",
+          }}
+        >
+          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px", color: "#1B1F24" }}>
+            <thead>
+              <tr style={{ textAlign: "left", color: "#888", fontSize: "11px", textTransform: "uppercase" }}>
+                <th style={{ padding: "14px 16px" }}>Socio</th>
+                <th style={{ padding: "14px 16px" }}>Plan</th>
+                <th style={{ padding: "14px 16px" }}>Horas usadas / sin usar</th>
+                <th style={{ padding: "14px 16px" }}>Inicio</th>
+                <th style={{ padding: "14px 16px" }}>Horas se resetean</th>
+                <th style={{ padding: "14px 16px" }}>Fin de permanencia</th>
+                <th style={{ padding: "14px 16px" }}>Estado</th>
+              </tr>
+            </thead>
+            <tbody>
+              {memberships.map((m) => (
+                <tr key={m._id} style={{ borderTop: "0.5px solid #eee" }}>
+                  <td style={{ padding: "14px 16px" }}>
+                    <div style={{ fontWeight: "500", color: "#000" }}>
+                      {m.user?.name || "Usuario eliminado"}
+                    </div>
+                    <div style={{ color: "#888", fontSize: "12px" }}>{m.user?.email}</div>
+                  </td>
+                  <td style={{ padding: "14px 16px" }}>{PLAN_LABELS[m.plan]}</td>
+                  <td style={{ padding: "14px 16px" }}>
+                    {m.hoursUsed}h / {m.hoursRemaining}h
+                  </td>
+                  <td style={{ padding: "14px 16px" }}>{formatDate(m.startDate)}</td>
+                  <td style={{ padding: "14px 16px" }}>{formatDate(m.cycleEndsAt)}</td>
+                  <td style={{ padding: "14px 16px" }}>{formatDate(m.cancelableFrom)}</td>
+                  <td style={{ padding: "14px 16px" }}>
+                    <span
+                      style={{
+                        fontSize: "11px",
+                        padding: "2px 8px",
+                        borderRadius: "8px",
+                        fontWeight: "500",
+                        background: m.status === "activa" ? "#EAF3DE" : "#FBE4E4",
+                        color: m.status === "activa" ? "#27500A" : "#8A2E2E",
+                      }}
+                    >
+                      {m.status === "activa" ? "Pagado" : "No pagado"}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }
