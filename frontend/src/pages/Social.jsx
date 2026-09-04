@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "motion/react";
 import Cropper from "react-easy-crop";
 import { useAuth } from "../context/AuthContext";
 import api from "../services/api";
@@ -10,6 +11,7 @@ import like from "../assets/like.svg";
 import sinlike from "../assets/sinlike.svg";
 import eliminar from "../assets/eliminar.svg";
 import upload from "../assets/upload.svg";
+import { fadeInUp, staggerDelay } from "../utils/motionVariants";
 
 function Social() {
   const { user } = useAuth();
@@ -267,6 +269,7 @@ function Social() {
                 <div style={{ display: "flex", gap: "8px", marginTop: "4px" }}>
                   <button
                     onClick={handleConfirmCrop}
+                    className="btn-motion"
                     style={{
                       padding: "6px 14px",
                       background: "#1B35C6",
@@ -367,6 +370,7 @@ function Social() {
               <button
                 onClick={handleCrearPost}
                 disabled={!newPost.trim() || newPost.length > 120 || publishing}
+                className="btn-motion"
                 style={{
                   padding: "6px 16px",
                   background: "#1B35C6",
@@ -412,9 +416,12 @@ function Social() {
               No se pudo cargar el feed. Intenta recargar la página.
             </p>
           )}
-          {posts.map((post) => (
-            <div
+          {posts.map((post, i) => (
+            <motion.div
               key={post._id}
+              className="lift-card"
+              {...fadeInUp}
+              {...staggerDelay(i)}
               style={{
                 background: "#ffffff",
                 borderRadius: "18px 18px 18px 4px",
@@ -661,6 +668,7 @@ function Social() {
                       />
                       <button
                         onClick={() => handleAddComment(post._id)}
+                        className="btn-motion"
                         style={{
                           padding: "6px 14px",
                           background: "#1B35C6",
@@ -678,11 +686,12 @@ function Social() {
                   </div>
                 )}
               </div>
-            </div>
+            </motion.div>
           ))}
           {hasMore && (
             <button
               onClick={handleCargarMas}
+              className="btn-motion"
               style={{
                 display: "block",
                 margin: "0 auto",

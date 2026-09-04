@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
+import { motion } from "motion/react";
 import api from "../services/api";
+import { fadeInUp } from "../utils/motionVariants";
 
 const PLAN_LABELS = {
   basic: "Básico — 100€/mes, 10h",
@@ -55,7 +57,9 @@ function MembershipCard() {
       >
         Tu membresía
       </p>
-      <div
+      <motion.div
+        className="lift-card"
+        {...fadeInUp}
         style={{
           background: "#ffffff",
           borderRadius: "18px",
@@ -98,6 +102,7 @@ function MembershipCard() {
         <button
           onClick={canCancel ? handleCancelar : undefined}
           disabled={!canCancel}
+          className="btn-motion"
           style={{
             padding: "8px 16px",
             background: "#fff",
@@ -113,7 +118,7 @@ function MembershipCard() {
             ? "Cancelar membresía"
             : `Podrás cancelar a partir del ${cancelableFrom.toLocaleDateString("es-ES")}`}
         </button>
-      </div>
+      </motion.div>
     </div>
   );
 }

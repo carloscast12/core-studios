@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
 
@@ -20,8 +21,11 @@ function BookingCart() {
 
   return (
     <>
-      <button
+      <motion.button
         onClick={() => setOpen(!open)}
+        whileHover={{ scale: 1.08, y: -3 }}
+        whileTap={{ scale: 0.95 }}
+        transition={{ type: "spring", stiffness: 400, damping: 17 }}
         style={{
           position: "fixed",
           bottom: "24px",
@@ -59,10 +63,15 @@ function BookingCart() {
             {items.length}
           </span>
         )}
-      </button>
+      </motion.button>
 
+      <AnimatePresence>
       {open && (
-        <div
+        <motion.div
+          initial={{ opacity: 0, y: 12, scale: 0.96 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 12, scale: 0.96 }}
+          transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
           style={{
             position: "fixed",
             bottom: "90px",
@@ -161,6 +170,7 @@ function BookingCart() {
           <button
             onClick={handlePagar}
             disabled={items.length === 0}
+            className="btn-motion"
             style={{
               width: "100%",
               padding: "10px",
@@ -175,8 +185,9 @@ function BookingCart() {
           >
             Pagar
           </button>
-        </div>
+        </motion.div>
       )}
+      </AnimatePresence>
     </>
   );
 }

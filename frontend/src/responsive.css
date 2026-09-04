@@ -176,6 +176,12 @@
   padding: 2rem 1.5rem 1.5rem;
   position: relative;
   box-shadow: 0 4px 20px rgba(50, 50, 50, 0.2);
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease;
+}
+
+.metric-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 32px rgba(27, 53, 198, 0.18);
 }
 
 .dashboard-row {
@@ -247,6 +253,12 @@
   border-radius: 14px;
   padding: 1rem 2rem;
   box-shadow: 0 4px 20px rgba(50, 50, 50, 0.15);
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease;
+}
+
+.booking-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(27, 53, 198, 0.16);
 }
 
 .booking-card-header {
@@ -431,6 +443,16 @@
   font-weight: 500;
   cursor: pointer;
   margin-top: 4px;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+}
+
+.auth-button:hover {
+  transform: translateY(-2px) scale(1.015);
+  box-shadow: 0 8px 20px rgba(27, 53, 198, 0.35);
+}
+
+.auth-button:active {
+  transform: translateY(0) scale(0.98);
 }
 
 .auth-error {
@@ -766,10 +788,42 @@
   align-items: center;
   gap: 10px;
   margin-bottom: 1rem;
+  padding: 6px;
+  margin-left: -6px;
+  margin-right: -6px;
+  border-radius: 10px;
+  transition: background 0.2s ease;
+}
+
+.follow-card:hover {
+  background: #f5f6f8;
 }
 
 .follow-card:last-child {
   margin-bottom: 0;
+}
+
+/* ===== Utilidades de animación (Motion, dirección B) ===== */
+.btn-motion {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+}
+
+.btn-motion:not(:disabled):hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(27, 53, 198, 0.35);
+}
+
+.btn-motion:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.lift-card {
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease;
+}
+
+.lift-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 32px rgba(27, 53, 198, 0.18) !important;
 }
 
 .follow-avatar {

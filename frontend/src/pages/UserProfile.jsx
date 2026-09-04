@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { motion } from "motion/react";
 import { useAuth } from "../context/AuthContext";
 import api from "../services/api";
 import eliminar from "../assets/eliminar.svg";
+import { fadeInUp, staggerDelay } from "../utils/motionVariants";
 
 const POSTS_PER_PAGE = 5;
 
@@ -298,6 +300,7 @@ function UserProfile() {
         {isOwnProfile && !editing && (
           <button
             onClick={() => setEditing(true)}
+            className="btn-motion"
             style={{
               padding: "8px 16px",
               background: "transparent",
@@ -316,6 +319,7 @@ function UserProfile() {
         {!isOwnProfile && authUser?.role === "admin" && (
           <button
             onClick={handleEliminarUsuario}
+            className="btn-motion"
             style={{
               padding: "8px 16px",
               background: "transparent",
@@ -468,6 +472,7 @@ function UserProfile() {
           <div style={{ display: "flex", gap: "8px" }}>
             <button
               onClick={handleGuardar}
+              className="btn-motion"
               style={{
                 flex: 1,
                 padding: "10px",
@@ -484,6 +489,7 @@ function UserProfile() {
             </button>
             <button
               onClick={() => setEditing(false)}
+              className="btn-motion"
               style={{
                 padding: "10px 16px",
                 background: "transparent",
@@ -588,9 +594,12 @@ function UserProfile() {
           Todavía no tiene posts
         </p>
       )}
-      {posts.map((post) => (
-        <div
+      {posts.map((post, i) => (
+        <motion.div
           key={post._id}
+          className="lift-card"
+          {...fadeInUp}
+          {...staggerDelay(i)}
           style={{
             background: "#ffffff",
             borderRadius: "18px 18px 18px 4px",
@@ -651,11 +660,12 @@ function UserProfile() {
           <span style={{ fontSize: "13px", color: "#666" }}>
             {post.likes.length} {post.likes.length === 1 ? "like" : "likes"}
           </span>
-        </div>
+        </motion.div>
       ))}
       {hasMore && posts.length > 0 && (
         <button
           onClick={handleCargarMas}
+          className="btn-motion"
           style={{
             display: "block",
             margin: "0 auto",

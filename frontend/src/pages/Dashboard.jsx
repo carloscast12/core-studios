@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
 import api from "../services/api";
+import { modalOverlay, modalContent, fadeInUp, staggerDelay } from "../utils/motionVariants";
 import producir from "../assets/producir.svg";
 import dj from "../assets/dj.svg";
 import edit from "../assets/edit.svg";
@@ -266,7 +268,7 @@ function Dashboard() {
             desc: "Likes que ha recibido tu contenido en total",
           },
         ].map((m, i) => (
-          <div key={i} className="metric-card">
+          <motion.div key={i} className="metric-card" {...fadeInUp} {...staggerDelay(i)}>
             <div
               style={{
                 position: "absolute",
@@ -311,7 +313,7 @@ function Dashboard() {
               }}
             />
             <div style={{ fontSize: "11px", color: "#888" }}>{m.desc}</div>
-          </div>
+          </motion.div>
         ))}
       </div>
 
@@ -615,6 +617,7 @@ function Dashboard() {
         </span>
         <button
           onClick={() => setShowModal(true)}
+          className="btn-motion"
           style={{
             fontSize: "13px",
             color: "#fff",
@@ -637,7 +640,7 @@ function Dashboard() {
             </p>
           </div>
         )}
-        {bookings.map((booking) => {
+        {bookings.map((booking, i) => {
           const cabinTitle =
             booking.cabinType === "dj" ? "Cabina DJ" : "Cabina de producción";
           const salaText =
@@ -646,7 +649,7 @@ function Dashboard() {
             (new Date(booking.endTime) - new Date(booking.startTime)) /
             (1000 * 60 * 60);
           return (
-            <div key={booking._id} className="booking-card">
+            <motion.div key={booking._id} className="booking-card" {...fadeInUp} {...staggerDelay(i)}>
               <div className="booking-card-header">
                 <span className="booking-card-title">{cabinTitle}</span>
                 <div
@@ -700,7 +703,7 @@ function Dashboard() {
                 {duracion}h. Si tienes alguna duda, no dudes en contactarnos por
                 nuestros canales oficiales.
               </p>
-            </div>
+            </motion.div>
           );
         })}
       </div>
@@ -761,7 +764,7 @@ function Dashboard() {
                 </p>
               </div>
             )}
-            {adminBookingsDelDia.map((booking) => {
+            {adminBookingsDelDia.map((booking, i) => {
               const cabinTitle =
                 booking.cabinType === "dj" ? "Cabina DJ" : "Cabina de producción";
               const statusColors = {
@@ -771,7 +774,7 @@ function Dashboard() {
               };
               const statusStyle = statusColors[booking.status] || statusColors.pendiente;
               return (
-                <div key={booking._id} className="booking-card">
+                <motion.div key={booking._id} className="booking-card" {...fadeInUp} {...staggerDelay(i)}>
                   <div className="booking-card-header">
                     <span className="booking-card-title">
                       {cabinTitle} — {booking.user?.name || "Usuario eliminado"}
@@ -809,6 +812,7 @@ function Dashboard() {
                     {booking.status !== "confirmada" && (
                       <button
                         onClick={() => handleConfirmarReservaAdmin(booking._id)}
+                        className="btn-motion"
                         style={{
                           padding: "8px 16px",
                           background: "#1B35C6",
@@ -826,6 +830,7 @@ function Dashboard() {
                     {booking.status !== "cancelada" && (
                       <button
                         onClick={() => handleCancelarReservaAdmin(booking._id)}
+                        className="btn-motion"
                         style={{
                           padding: "8px 16px",
                           background: "#fff",
@@ -841,7 +846,7 @@ function Dashboard() {
                       </button>
                     )}
                   </div>
-                </div>
+                </motion.div>
               );
             })}
           </div>
@@ -851,9 +856,10 @@ function Dashboard() {
       )}
 
       {/* Modal */}
-      {showModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
+      <AnimatePresence>
+        {showModal && (
+          <motion.div className="modal-overlay" {...modalOverlay}>
+            <motion.div className="modal-content" {...modalContent}>
             <div
               style={{
                 display: "flex",
@@ -1072,6 +1078,7 @@ function Dashboard() {
                 >
                   <button
                     onClick={handleEditarReserva}
+                    className="btn-motion"
                     style={{
                       padding: "10px",
                       background: "#185FA5",
@@ -1087,6 +1094,7 @@ function Dashboard() {
                   </button>
                   <button
                     onClick={handleEliminarReserva}
+                    className="btn-motion"
                     style={{
                       padding: "10px",
                       background: "#fff",
@@ -1104,6 +1112,7 @@ function Dashboard() {
               ) : (
                 <button
                   onClick={handleCrearReserva}
+                  className="btn-motion"
                   style={{
                     padding: "10px",
                     background: "#185FA5",
@@ -1119,9 +1128,10 @@ function Dashboard() {
                 </button>
               )}
             </div>
-          </div>
-        </div>
-      )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

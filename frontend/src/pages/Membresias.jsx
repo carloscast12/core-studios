@@ -1,5 +1,7 @@
 import { useState } from "react";
+import { motion } from "motion/react";
 import { useCart } from "../context/CartContext";
+import { fadeInUp, staggerDelay } from "../utils/motionVariants";
 
 const PLANS = [
   {
@@ -82,9 +84,12 @@ function Membresias() {
           gap: "1.5rem",
         }}
       >
-        {PLANS.map((plan) => (
-          <div
+        {PLANS.map((plan, i) => (
+          <motion.div
             key={plan.id}
+            className="lift-card"
+            {...fadeInUp}
+            {...staggerDelay(i)}
             style={{
               background: "#ffffff",
               borderRadius: "14px",
@@ -135,6 +140,7 @@ function Membresias() {
               </ul>
               <button
                 onClick={() => handleComprar(plan)}
+                className="btn-motion"
                 style={{
                   padding: "10px",
                   background: "#1B35C6",
@@ -149,7 +155,7 @@ function Membresias() {
                 Comprar membresía
               </button>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
     </div>

@@ -100,6 +100,7 @@ function AdminMembershipPanel() {
         </select>
         <button
           onClick={handleCrear}
+          className="btn-motion"
           style={{
             padding: "8px 20px",
             background: "#1B35C6",

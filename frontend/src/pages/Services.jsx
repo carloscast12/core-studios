@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import api from "../services/api";
 import podcastPhoto from "../assets/podcast.png";
 import grabacionPhoto from "../assets/abdel.jpg";
 import equiposDjPhoto from "../assets/notalex.jpg";
+import { fadeInUp, staggerDelay, modalOverlay, modalContent } from "../utils/motionVariants";
 
 const SERVICES = [
   {
@@ -95,9 +97,12 @@ function Services() {
           gap: "1.5rem",
         }}
       >
-        {SERVICES.map((service) => (
-          <div
+        {SERVICES.map((service, i) => (
+          <motion.div
             key={service.id}
+            className="lift-card"
+            {...fadeInUp}
+            {...staggerDelay(i)}
             style={{
               background: "#ffffff",
               borderRadius: "14px",
@@ -159,6 +164,7 @@ function Services() {
               </p>
               <button
                 onClick={() => setActiveService(service)}
+                className="btn-motion"
                 style={{
                   padding: "10px",
                   background: "#1B35C6",
@@ -173,13 +179,14 @@ function Services() {
                 Estoy interesado
               </button>
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
 
+      <AnimatePresence>
       {activeService && (
-        <div className="modal-overlay">
-          <div className="modal-content">
+        <motion.div className="modal-overlay" {...modalOverlay}>
+          <motion.div className="modal-content" {...modalContent}>
             <div
               style={{
                 display: "flex",
@@ -252,6 +259,7 @@ function Services() {
                 <button
                   onClick={handleEnviar}
                   disabled={!message.trim() || sending}
+                  className="btn-motion"
                   style={{
                     width: "100%",
                     padding: "10px",
@@ -269,9 +277,10 @@ function Services() {
                 </button>
               </>
             )}
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       )}
+      </AnimatePresence>
     </div>
   );
 }
