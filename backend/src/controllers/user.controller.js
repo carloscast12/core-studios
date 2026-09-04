@@ -111,6 +111,7 @@ export const deleteUser = async (req, res) => {
 
     await Promise.all([
       Post.deleteMany({ user: id }),
+      Post.updateMany({ likes: id }, { $pull: { likes: id } }),
       Comment.deleteMany({ $or: [{ user: id }, { post: { $in: postIds } }] }),
       Booking.deleteMany({ user: id }),
       Follow.deleteMany({ $or: [{ follower: id }, { following: id }] }),

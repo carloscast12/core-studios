@@ -8,6 +8,9 @@ export const sendServiceInquiry = async (req, res) => {
       return res.status(400).json({ message: "faltan datos de la solicitud" });
     }
     const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(401).json({ message: "tu sesión ya no es válida, vuelve a iniciar sesión" });
+    }
 
     await transporter.sendMail({
       from: `"Core Studios Web" <${process.env.CONTACT_EMAIL}>`,
