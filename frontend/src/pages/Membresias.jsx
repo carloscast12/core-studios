@@ -7,21 +7,24 @@ const PLANS = [
   {
     id: "basic",
     title: "Básico",
+    accent: "#E8431A",
+    tagline: "Ideal para empezar y practicar en tus horarios libres.",
     price: 100,
-    gradient: "linear-gradient(135deg, #E8431A 0%, #F4A020 100%)",
-    features: ["10 horas de cabina al mes", "Cabina de DJ o de producción", "Permanencia mínima de 3 meses"],
+    features: ["10 horas de cabina al mes", "Cabina de DJ o de producción"],
+    recommended: false,
   },
   {
     id: "premium",
     title: "Premium",
+    accent: "#1B35C6",
+    tagline: "Para quienes quieren llevar sus sesiones al siguiente nivel.",
     price: 150,
-    gradient: "linear-gradient(135deg, #1B35C6 0%, #185FA5 100%)",
     features: [
       "13 horas de cabina al mes",
       "Cabina de DJ o de producción",
       "Videoset de tu sesión incluido",
-      "Permanencia mínima de 3 meses",
     ],
+    recommended: true,
   },
 ];
 
@@ -82,6 +85,7 @@ function Membresias() {
           display: "grid",
           gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
           gap: "1.5rem",
+          alignItems: "start",
         }}
       >
         {PLANS.map((plan, i) => (
@@ -91,70 +95,102 @@ function Membresias() {
             {...fadeInUp}
             {...staggerDelay(i)}
             style={{
-              background: "#ffffff",
-              borderRadius: "14px",
+              position: "relative",
+              background: plan.recommended ? "#F3F5FE" : "#ffffff",
+              borderRadius: "18px",
               overflow: "hidden",
-              boxShadow: "0 4px 20px rgba(50, 50, 50, 0.15)",
+              boxShadow: plan.recommended
+                ? "0 8px 28px rgba(27, 53, 198, 0.18)"
+                : "0 4px 20px rgba(50, 50, 50, 0.15)",
+              border: plan.recommended ? "1.5px solid #1B35C6" : "1px solid #eee",
               display: "flex",
               flexDirection: "column",
+              padding: "2rem 1.75rem 1.75rem",
+              textAlign: "center",
             }}
           >
-            <div
-              style={{
-                background: plan.gradient,
-                padding: "1.75rem",
-                color: "#fff",
-              }}
-            >
-              <div style={{ fontSize: "16px", fontWeight: "600", marginBottom: "6px" }}>
-                {plan.title}
-              </div>
-              <div style={{ fontSize: "30px", fontWeight: "700" }}>
-                {plan.price}€<span style={{ fontSize: "14px", fontWeight: "500" }}>/mes</span>
-              </div>
-            </div>
-            <div
-              style={{
-                padding: "1.5rem",
-                display: "flex",
-                flexDirection: "column",
-                flex: 1,
-              }}
-            >
-              <ul style={{ margin: "0 0 1.5rem", padding: 0, listStyle: "none", flex: 1 }}>
-                {plan.features.map((feature) => (
-                  <li
-                    key={feature}
-                    style={{
-                      fontSize: "13px",
-                      color: "#666",
-                      lineHeight: "1.8",
-                      display: "flex",
-                      gap: "8px",
-                    }}
-                  >
-                    <span style={{ color: "#1B35C6" }}>✓</span>
-                    {feature}
-                  </li>
-                ))}
-              </ul>
-              <button
-                onClick={() => handleComprar(plan)}
-                className="btn-motion"
+            {plan.recommended && (
+              <span
                 style={{
-                  padding: "10px",
-                  background: "#1B35C6",
+                  position: "absolute",
+                  top: "16px",
+                  right: "16px",
+                  fontSize: "11px",
+                  fontWeight: "600",
                   color: "#fff",
-                  border: "none",
-                  borderRadius: "8px",
-                  fontSize: "14px",
-                  fontWeight: "500",
-                  cursor: "pointer",
+                  background: "#1B35C6",
+                  padding: "4px 12px",
+                  borderRadius: "18px",
+                  letterSpacing: "0.02em",
                 }}
               >
-                Comprar membresía
-              </button>
+                Recomendado
+              </span>
+            )}
+
+            <div
+              style={{
+                fontSize: "12px",
+                fontWeight: "600",
+                textTransform: "uppercase",
+                letterSpacing: "0.06em",
+                color: plan.accent,
+                marginBottom: "14px",
+              }}
+            >
+              {plan.title}
             </div>
+
+            <div style={{ fontSize: "38px", fontWeight: "700", color: "#1B1F24", lineHeight: 1 }}>
+              {plan.price}€
+            </div>
+            <div style={{ fontSize: "12px", color: "#888", margin: "6px 0 14px" }}>
+              cada mes
+            </div>
+
+            <p style={{ fontSize: "13px", color: "#666", lineHeight: "1.6", margin: "0 0 12px" }}>
+              {plan.tagline}
+            </p>
+
+            <div style={{ fontSize: "11px", color: "#888", marginBottom: "1.5rem" }}>
+              Permanencia mínima de 3 meses
+            </div>
+
+            <button
+              onClick={() => handleComprar(plan)}
+              className="btn-motion"
+              style={{
+                padding: "10px",
+                background: plan.accent,
+                color: "#fff",
+                border: "none",
+                borderRadius: "18px",
+                fontSize: "14px",
+                fontWeight: "500",
+                cursor: "pointer",
+                marginBottom: "1.5rem",
+              }}
+            >
+              Comprar membresía
+            </button>
+
+            <div style={{ borderTop: "0.5px solid #ddd", marginBottom: "1.25rem" }} />
+
+            <ul style={{ margin: 0, padding: 0, listStyle: "none" }}>
+              {plan.features.map((feature, idx) => (
+                <li
+                  key={feature}
+                  style={{
+                    fontSize: "13px",
+                    color: "#555",
+                    padding: "10px 0",
+                    borderTop: idx === 0 ? "none" : "0.5px solid #eee",
+                  }}
+                >
+                  {feature}
+                </li>
+              ))}
+            </ul>
           </motion.div>
         ))}
       </div>

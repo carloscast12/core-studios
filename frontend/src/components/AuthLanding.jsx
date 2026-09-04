@@ -190,7 +190,7 @@ const FEATURES = [
               padding: "10px",
               background: "#1B35C6",
               color: "#fff",
-              borderRadius: "8px",
+              borderRadius: "18px",
               fontSize: "13px",
               fontWeight: "500",
             }}

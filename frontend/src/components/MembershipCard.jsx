@@ -108,7 +108,7 @@ function MembershipCard() {
             background: "#fff",
             color: canCancel ? "#e24b4a" : "#aaa",
             border: `0.5px solid ${canCancel ? "#e24b4a" : "#ccc"}`,
-            borderRadius: "8px",
+            borderRadius: "18px",
             fontSize: "12px",
             fontWeight: "500",
             cursor: canCancel ? "pointer" : "default",

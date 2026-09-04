@@ -177,7 +177,7 @@ function BookingCart() {
               background: items.length === 0 ? "#ccc" : "#1B35C6",
               color: "#fff",
               border: "none",
-              borderRadius: "8px",
+              borderRadius: "18px",
               fontSize: "14px",
               fontWeight: "500",
               cursor: items.length === 0 ? "default" : "pointer",

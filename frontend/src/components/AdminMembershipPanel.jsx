@@ -106,7 +106,7 @@ function AdminMembershipPanel() {
             background: "#1B35C6",
             color: "#fff",
             border: "none",
-            borderRadius: "8px",
+            borderRadius: "18px",
             fontSize: "13px",
             fontWeight: "500",
             cursor: "pointer",
