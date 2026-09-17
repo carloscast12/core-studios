@@ -35,6 +35,12 @@ const membershipSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    stripeSubscriptionId: {
+      type: String,
+    },
+    stripeCustomerId: {
+      type: String,
+    },
   },
   { timestamps: true },
 );

@@ -26,8 +26,23 @@ export const createStripeCheckoutSession = async ({ amount, reference, descripti
   });
 };
 
+export const createStripeSubscriptionSession = async ({ priceId, reference, successUrl, cancelUrl }) => {
+  return getStripe().checkout.sessions.create({
+    mode: "subscription",
+    payment_method_types: ["card"],
+    line_items: [{ price: priceId, quantity: 1 }],
+    client_reference_id: reference,
+    success_url: successUrl,
+    cancel_url: cancelUrl,
+  });
+};
+
 export const getStripeCheckoutSession = async (sessionId) => {
   return getStripe().checkout.sessions.retrieve(sessionId);
+};
+
+export const cancelStripeSubscription = async (subscriptionId) => {
+  return getStripe().subscriptions.cancel(subscriptionId);
 };
 
 export const constructStripeEvent = (rawBody, signature) => {

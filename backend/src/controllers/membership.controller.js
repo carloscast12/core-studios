@@ -1,6 +1,7 @@
 import User from "../models/User.js";
 import Membership, { MEMBERSHIP_PLANS } from "../models/Membership.js";
 import { refreshCycleIfNeeded } from "../utils/membershipCycle.js";
+import { cancelStripeSubscription } from "../utils/stripe.js";
 
 const THREE_MONTHS_MS = 1000 * 60 * 60 * 24 * 30 * 3;
 
@@ -63,6 +64,9 @@ export const cancelMembership = async (req, res) => {
         message: "todavía no puedes cancelar tu membresía",
         cancelableFrom,
       });
+    }
+    if (membership.stripeSubscriptionId) {
+      await cancelStripeSubscription(membership.stripeSubscriptionId);
     }
     membership.status = "cancelada";
     await membership.save();

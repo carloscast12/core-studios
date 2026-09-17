@@ -1,6 +1,7 @@
 import { MEMBERSHIP_PLANS } from "../models/Membership.js";
 
 export const refreshCycleIfNeeded = async (membership) => {
+  if (membership.status !== "activa") return membership;
   const nextCycle = new Date(membership.currentCycleStart);
   nextCycle.setMonth(nextCycle.getMonth() + 1);
   if (new Date() >= nextCycle) {
