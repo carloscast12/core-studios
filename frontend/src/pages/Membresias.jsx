@@ -10,6 +10,7 @@ const PLANS = [
     accent: "#E8431A",
     tagline: "Ideal para empezar y practicar en tus horarios libres.",
     price: 100,
+    oldPrice: 150,
     features: ["10 horas de cabina al mes", "Cabina de DJ o de producción"],
     recommended: false,
   },
@@ -19,6 +20,7 @@ const PLANS = [
     accent: "#1B35C6",
     tagline: "Para quienes quieren llevar sus sesiones al siguiente nivel.",
     price: 150,
+    oldPrice: 230,
     features: [
       "13 horas de cabina al mes",
       "Cabina de DJ o de producción",
@@ -142,8 +144,15 @@ function Membresias() {
               {plan.title}
             </div>
 
-            <div style={{ fontSize: "38px", fontWeight: "700", color: "#1B1F24", lineHeight: 1 }}>
-              {plan.price}€
+            <div style={{ display: "flex", alignItems: "baseline", justifyContent: "center", gap: "8px" }}>
+              {plan.oldPrice && (
+                <span style={{ fontSize: "18px", color: "#aaa", textDecoration: "line-through" }}>
+                  {plan.oldPrice}€
+                </span>
+              )}
+              <span style={{ fontSize: "38px", fontWeight: "700", color: "#1B1F24", lineHeight: 1 }}>
+                {plan.price}€
+              </span>
             </div>
             <div style={{ fontSize: "12px", color: "#888", margin: "6px 0 14px" }}>
               cada mes

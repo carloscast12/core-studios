@@ -6,6 +6,7 @@ import corestudios from "../assets/corestudios.png";
 import cedabbi from "../assets/cedabbi.jpg";
 import AuthLanding from "../components/AuthLanding";
 import AuthBenefits from "../components/AuthBenefits";
+import PasswordInput from "../components/PasswordInput";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -59,10 +60,7 @@ function Login() {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
-            <input
-              className="auth-input"
-              type="password"
-              placeholder="Contraseña"
+            <PasswordInput
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required

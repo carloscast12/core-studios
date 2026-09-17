@@ -6,6 +6,7 @@ import corestudios from '../assets/corestudios.png'
 import cedabbi from '../assets/cedabbi.jpg'
 import AuthLanding from '../components/AuthLanding'
 import AuthBenefits from '../components/AuthBenefits'
+import PasswordInput from '../components/PasswordInput'
 
 function Register() {
   const [name, setName] = useState('')
@@ -48,7 +49,7 @@ function Register() {
           <form className="auth-form" onSubmit={handleSubmit}>
             <input className="auth-input" type="text" placeholder="Nombre" value={name} onChange={(e) => setName(e.target.value)} required />
             <input className="auth-input" type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-            <input className="auth-input" type="password" placeholder="Contraseña" value={password} onChange={(e) => setPassword(e.target.value)} required />
+            <PasswordInput value={password} onChange={(e) => setPassword(e.target.value)} required />
             {error && <p className="auth-error">{error}</p>}
             <button className="auth-button" type="submit">Registrarse</button>
           </form>

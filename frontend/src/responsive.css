@@ -433,6 +433,33 @@
   font-family: "Montserrat", sans-serif;
 }
 
+.auth-password-wrapper {
+  position: relative;
+  display: flex;
+}
+
+.auth-password-wrapper .auth-input {
+  padding-right: 42px;
+}
+
+.auth-password-toggle {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: #888;
+}
+
+.auth-password-toggle:hover {
+  color: #1b35c6;
+}
+
 .auth-button {
   padding: 12px;
   background: #1b35c6;
