@@ -135,6 +135,7 @@ function Dashboard() {
         const cabinTitle = newBooking.cabinType === "dj" ? "Cabina DJ" : "Cabina de producción";
         addItem({
           type: "booking",
+          bookingId: created.data._id,
           label: `${cabinTitle} — ${newBooking.date} ${newBooking.hora}:00 (${newBooking.duracion}h)`,
           price: created.data.price,
         });

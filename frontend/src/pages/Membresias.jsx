@@ -35,6 +35,7 @@ function Membresias() {
   const handleComprar = (plan) => {
     addItem({
       type: "membership",
+      plan: plan.id,
       label: `Membresía ${plan.title}`,
       price: plan.price,
     });

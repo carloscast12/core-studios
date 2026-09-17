@@ -2,21 +2,32 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
+import api from "../services/api";
 
 function BookingCart() {
   const { token } = useAuth();
-  const { items, removeItem } = useCart();
+  const { items, removeItem, clearCart } = useCart();
   const [open, setOpen] = useState(false);
   const [notice, setNotice] = useState(null);
+  const [paying, setPaying] = useState(false);
 
   if (!token) return null;
 
   const total = items.reduce((sum, i) => sum + i.price, 0);
 
-  const handlePagar = () => {
-    setNotice(
-      "El pago con tarjeta estará disponible muy pronto — mientras tanto, tus reservas quedan pendientes de confirmación.",
-    );
+  const handlePagar = async () => {
+    setPaying(true);
+    setNotice(null);
+    try {
+      const res = await api.post("/payments/checkout", {
+        items: items.map((i) => ({ type: i.type, bookingId: i.bookingId, plan: i.plan })),
+      });
+      clearCart();
+      window.location.href = res.data.hostedCheckoutUrl;
+    } catch (error) {
+      setNotice(error.response?.data?.message || "No se pudo iniciar el pago, intenta de nuevo");
+      setPaying(false);
+    }
   };
 
   return (
@@ -169,7 +180,7 @@ function BookingCart() {
           </div>
           <button
             onClick={handlePagar}
-            disabled={items.length === 0}
+            disabled={items.length === 0 || paying}
             className="btn-motion"
             style={{
               width: "100%",
@@ -180,10 +191,11 @@ function BookingCart() {
               borderRadius: "18px",
               fontSize: "14px",
               fontWeight: "500",
-              cursor: items.length === 0 ? "default" : "pointer",
+              cursor: items.length === 0 || paying ? "default" : "pointer",
+              opacity: paying ? 0.7 : 1,
             }}
           >
-            Pagar
+            {paying ? "Redirigiendo..." : "Pagar"}
           </button>
         </motion.div>
       )}
