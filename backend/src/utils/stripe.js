@@ -29,3 +29,7 @@ export const createStripeCheckoutSession = async ({ amount, reference, descripti
 export const getStripeCheckoutSession = async (sessionId) => {
   return getStripe().checkout.sessions.retrieve(sessionId);
 };
+
+export const constructStripeEvent = (rawBody, signature) => {
+  return getStripe().webhooks.constructEvent(rawBody, signature, process.env.STRIPE_WEBHOOK_SECRET);
+};

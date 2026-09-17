@@ -1,7 +1,27 @@
 import Booking from "../models/Booking.js";
 import Membership, { MEMBERSHIP_PLANS } from "../models/Membership.js";
 import Payment from "../models/Payment.js";
-import { createStripeCheckoutSession, getStripeCheckoutSession } from "../utils/stripe.js";
+import { createStripeCheckoutSession, getStripeCheckoutSession, constructStripeEvent } from "../utils/stripe.js";
+
+const fulfillPayment = async (payment) => {
+  if (payment.status === "pagado") return;
+  for (const item of payment.items) {
+    if (item.type === "booking") {
+      await Booking.findByIdAndUpdate(item.booking, { status: "confirmada" });
+    } else if (item.type === "membership") {
+      const existing = await Membership.findOne({ user: payment.user });
+      if (!existing) {
+        await Membership.create({
+          user: payment.user,
+          plan: item.plan,
+          hoursRemaining: MEMBERSHIP_PLANS[item.plan].hours,
+        });
+      }
+    }
+  }
+  payment.status = "pagado";
+  await payment.save();
+};
 
 export const createCheckout = async (req, res) => {
   try {
@@ -77,22 +97,7 @@ export const confirmCheckout = async (req, res) => {
     const session = await getStripeCheckoutSession(payment.checkoutId);
 
     if (session.payment_status === "paid") {
-      for (const item of payment.items) {
-        if (item.type === "booking") {
-          await Booking.findByIdAndUpdate(item.booking, { status: "confirmada" });
-        } else if (item.type === "membership") {
-          const existing = await Membership.findOne({ user: req.user.id });
-          if (!existing) {
-            await Membership.create({
-              user: req.user.id,
-              plan: item.plan,
-              hoursRemaining: MEMBERSHIP_PLANS[item.plan].hours,
-            });
-          }
-        }
-      }
-      payment.status = "pagado";
-      await payment.save();
+      await fulfillPayment(payment);
       return res.status(200).json({ status: "pagado" });
     }
 
@@ -106,4 +111,23 @@ export const confirmCheckout = async (req, res) => {
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
+};
+
+export const stripeWebhook = async (req, res) => {
+  let event;
+  try {
+    event = constructStripeEvent(req.body, req.headers["stripe-signature"]);
+  } catch (error) {
+    return res.status(400).json({ message: `firma de webhook inválida: ${error.message}` });
+  }
+
+  if (event.type === "checkout.session.completed") {
+    const session = event.data.object;
+    const payment = await Payment.findOne({ checkoutId: session.id });
+    if (payment && session.payment_status === "paid") {
+      await fulfillPayment(payment);
+    }
+  }
+
+  return res.status(200).json({ received: true });
 };

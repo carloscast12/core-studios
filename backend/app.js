@@ -9,10 +9,13 @@ import followRoutes from "./src/routes/follow.routes.js";
 import serviceRoutes from "./src/routes/service.routes.js";
 import membershipRoutes from "./src/routes/membership.routes.js";
 import paymentRoutes from "./src/routes/payment.routes.js";
+import { stripeWebhook } from "./src/controllers/payment.controller.js";
 
 const app = express();
 
 app.use(cors());
+// Stripe firma el body crudo, así que este endpoint va antes del parser JSON global
+app.post("/api/payments/webhook", express.raw({ type: "application/json" }), stripeWebhook);
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
