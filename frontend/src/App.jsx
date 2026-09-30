@@ -2,6 +2,8 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-route
 import { AnimatePresence, motion } from 'motion/react'
 import Login from './pages/Login.jsx'
 import Register from './pages/Register.jsx'
+import ForgotPassword from './pages/ForgotPassword.jsx'
+import ResetPassword from './pages/ResetPassword.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import UserProfile from './pages/UserProfile.jsx'
 import ProtectedRoute from './components/ProtectedRoute.jsx'
@@ -40,6 +42,8 @@ function AnimatedRoutes() {
           <Route path="/" element={<RootRedirect />} />
           <Route path="/login" element={<GuestRoute><Login /></GuestRoute>} />
           <Route path="/register" element={<GuestRoute><Register /></GuestRoute>} />
+          <Route path="/forgot-password" element={<GuestRoute><ForgotPassword /></GuestRoute>} />
+          <Route path="/reset-password" element={<GuestRoute><ResetPassword /></GuestRoute>} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><ProfileRedirect /></ProtectedRoute>} />
           <Route path="/profile/:userId" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />

@@ -31,6 +31,12 @@ const userSchema = new mongoose.Schema(
       instagram: { type: String },
       soundcloud: { type: String },
     },
+    resetPasswordToken: {
+      type: String,
+    },
+    resetPasswordExpires: {
+      type: Date,
+    },
   },
   { timestamps: true },
 );
