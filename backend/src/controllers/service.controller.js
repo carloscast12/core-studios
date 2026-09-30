@@ -13,7 +13,7 @@ export const sendServiceInquiry = async (req, res) => {
     }
 
     await transporter.sendMail({
-      from: `"Core Studios Web" <${process.env.CONTACT_EMAIL}>`,
+      from: process.env.CONTACT_EMAIL,
       to: process.env.CONTACT_EMAIL,
       replyTo: user.email,
       subject: `Nueva solicitud: ${service}`,
