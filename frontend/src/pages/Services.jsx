@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import api from "../services/api";
-import podcastPhoto from "../assets/podcast.png";
+import podcastPhoto from "../assets/podcast.jpg";
 import grabacionPhoto from "../assets/abdel.jpg";
 import equiposDjPhoto from "../assets/notalex.jpg";
 import { fadeInUp, staggerDelay, modalOverlay, modalContent } from "../utils/motionVariants";
