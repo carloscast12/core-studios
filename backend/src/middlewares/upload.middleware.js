@@ -6,7 +6,7 @@ const storage = cloudinaryStorage({
   cloudinary,
   folder: "encore-web",
   allowedFormats: ["jpg", "jpeg", "png", "webp"],
-  transformation: [{ width: 800, height: 800, crop: "limit" }],
+  transformation: [{ width: 800, height: 800, crop: "limit", quality: "auto", fetch_format: "auto" }],
 });
 
 const upload = multer({ storage });

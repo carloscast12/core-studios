@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useLocation } from "react-router-dom";
 import corestudios from "../assets/corestudios.png";
+import { optimizedImage } from "../utils/cloudinaryUrl";
 
 function Navbar() {
   const { user, token, logout } = useAuth();
@@ -94,7 +95,7 @@ function Navbar() {
               fontWeight: "500",
               color: "#185FA5",
               cursor: "pointer",
-              backgroundImage: user?.avatar ? `url(${user.avatar})` : undefined,
+              backgroundImage: user?.avatar ? `url(${optimizedImage(user.avatar, 100)})` : undefined,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}

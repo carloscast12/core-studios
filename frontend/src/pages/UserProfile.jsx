@@ -5,6 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import api from "../services/api";
 import eliminar from "../assets/eliminar.svg";
 import { fadeInUp, staggerDelay } from "../utils/motionVariants";
+import { optimizedImage } from "../utils/cloudinaryUrl";
 
 const POSTS_PER_PAGE = 5;
 
@@ -221,7 +222,7 @@ function UserProfile() {
                 color: "#185FA5",
                 cursor: "pointer",
                 backgroundImage: profile.avatar
-                  ? `url(${profile.avatar})`
+                  ? `url(${optimizedImage(profile.avatar, 150)})`
                   : undefined,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
@@ -249,7 +250,7 @@ function UserProfile() {
                 fontWeight: "500",
                 color: "#185FA5",
                 backgroundImage: profile.avatar
-                  ? `url(${profile.avatar})`
+                  ? `url(${optimizedImage(profile.avatar, 150)})`
                   : undefined,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
@@ -558,7 +559,7 @@ function UserProfile() {
                 className="follow-avatar"
                 style={{
                   cursor: "pointer",
-                  backgroundImage: u.avatar ? `url(${u.avatar})` : undefined,
+                  backgroundImage: u.avatar ? `url(${optimizedImage(u.avatar, 100)})` : undefined,
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                 }}
@@ -646,8 +647,9 @@ function UserProfile() {
           </p>
           {post.images?.length > 0 && (
             <img
-              src={post.images[0]}
+              src={optimizedImage(post.images[0], 700)}
               alt=""
+              loading="lazy"
               style={{
                 width: "100%",
                 aspectRatio: "1 / 1",

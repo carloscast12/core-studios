@@ -7,6 +7,7 @@ import api from "../services/api";
 import WhoToFollow from "../components/WhoToFollow";
 import ProfileStats from "../components/ProfileStats";
 import getCroppedImg from "../utils/cropImage";
+import { optimizedImage } from "../utils/cloudinaryUrl";
 import like from "../assets/like.svg";
 import sinlike from "../assets/sinlike.svg";
 import eliminar from "../assets/eliminar.svg";
@@ -455,7 +456,7 @@ function Social() {
                     flexShrink: 0,
                     cursor: "pointer",
                     backgroundImage: post.user?.avatar
-                      ? `url(${post.user.avatar})`
+                      ? `url(${optimizedImage(post.user.avatar, 100)})`
                       : undefined,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
@@ -517,8 +518,9 @@ function Social() {
               </p>
               {post.images?.length > 0 && (
                 <img
-                  src={post.images[0]}
+                  src={optimizedImage(post.images[0], 700)}
                   alt=""
+                  loading="lazy"
                   style={{
                     width: "100%",
                     aspectRatio: "1 / 1",
@@ -597,7 +599,7 @@ function Social() {
                             flexShrink: 0,
                             cursor: "pointer",
                             backgroundImage: c.user?.avatar
-                              ? `url(${c.user.avatar})`
+                              ? `url(${optimizedImage(c.user.avatar, 100)})`
                               : undefined,
                             backgroundSize: "cover",
                             backgroundPosition: "center",
