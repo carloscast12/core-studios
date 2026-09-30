@@ -14,10 +14,14 @@ import eliminar from "../assets/eliminar.svg";
 import upload from "../assets/upload.svg";
 import { fadeInUp, staggerDelay } from "../utils/motionVariants";
 
+// Cachea el feed fuera del componente para que al volver a la pestaña
+// se muestre al instante mientras se refresca en segundo plano.
+let cachedPosts = null;
+
 function Social() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState(cachedPosts || []);
   const [newPost, setNewPost] = useState("");
   const [newImages, setNewImages] = useState([]);
   const [previewUrl, setPreviewUrl] = useState(null);
@@ -41,6 +45,7 @@ function Social() {
       try {
         const res = await api.get(`/posts?page=1&limit=${POSTS_PER_PAGE}`);
         setPosts(res.data);
+        cachedPosts = res.data;
         setPage(1);
         setHasMore(res.data.length === POSTS_PER_PAGE);
         setLoadError(false);
