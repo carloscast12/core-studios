@@ -1,5 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
-import { AnimatePresence, motion } from 'motion/react'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Login from './pages/Login.jsx'
 import Register from './pages/Register.jsx'
 import ForgotPassword from './pages/ForgotPassword.jsx'
@@ -28,32 +27,21 @@ function RootRedirect() {
 }
 
 function AnimatedRoutes() {
-  const location = useLocation()
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={location.pathname}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.15 }}
-      >
-        <Routes location={location}>
-          <Route path="/" element={<RootRedirect />} />
-          <Route path="/login" element={<GuestRoute><Login /></GuestRoute>} />
-          <Route path="/register" element={<GuestRoute><Register /></GuestRoute>} />
-          <Route path="/forgot-password" element={<GuestRoute><ForgotPassword /></GuestRoute>} />
-          <Route path="/reset-password" element={<GuestRoute><ResetPassword /></GuestRoute>} />
-          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-          <Route path="/profile" element={<ProtectedRoute><ProfileRedirect /></ProtectedRoute>} />
-          <Route path="/profile/:userId" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
-          <Route path="/social" element={<ProtectedRoute><Social /></ProtectedRoute>} />
-          <Route path="/servicios" element={<ProtectedRoute><Services /></ProtectedRoute>} />
-          <Route path="/membresias" element={<ProtectedRoute><Membresias /></ProtectedRoute>} />
-          <Route path="/pago-completado" element={<ProtectedRoute><PaymentComplete /></ProtectedRoute>} />
-        </Routes>
-      </motion.div>
-    </AnimatePresence>
+    <Routes>
+      <Route path="/" element={<RootRedirect />} />
+      <Route path="/login" element={<GuestRoute><Login /></GuestRoute>} />
+      <Route path="/register" element={<GuestRoute><Register /></GuestRoute>} />
+      <Route path="/forgot-password" element={<GuestRoute><ForgotPassword /></GuestRoute>} />
+      <Route path="/reset-password" element={<GuestRoute><ResetPassword /></GuestRoute>} />
+      <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+      <Route path="/profile" element={<ProtectedRoute><ProfileRedirect /></ProtectedRoute>} />
+      <Route path="/profile/:userId" element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
+      <Route path="/social" element={<ProtectedRoute><Social /></ProtectedRoute>} />
+      <Route path="/servicios" element={<ProtectedRoute><Services /></ProtectedRoute>} />
+      <Route path="/membresias" element={<ProtectedRoute><Membresias /></ProtectedRoute>} />
+      <Route path="/pago-completado" element={<ProtectedRoute><PaymentComplete /></ProtectedRoute>} />
+    </Routes>
   )
 }
 
